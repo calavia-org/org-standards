@@ -1,0 +1,89 @@
+# {{REPO_NAME}} — Agent Instructions
+
+> **MANDATORY READ**: This repository is governed by [`~/Development/Github/AGENTS.md`](../AGENTS.md) (organization-wide rules). Per-repo rules below provide project-specific details but **cannot override** organization rules.
+
+## Project Overview
+
+[One sentence: what this project does]
+
+## Repository Layout
+
+```
+.
+├── src/                    # Source code
+├── tests/                  # Test files
+├── docs/                   # Documentation
+└── ...
+```
+
+## Tech Stack
+
+- **Language**: [e.g., TypeScript, Python, Go]
+- **Framework**: [e.g., Next.js, Django, Gin]
+- **Package Manager**: [e.g., npm, poetry, go modules]
+
+## Environment Setup
+
+```bash
+# One-time setup
+[commands]
+
+# Run locally
+[commands]
+```
+
+## Linting & Formatting
+
+```bash
+# Run linting
+[command]
+
+# Run formatting
+[command]
+
+# Run type checking
+[command]
+```
+
+## Testing
+
+```bash
+# Unit tests
+[command]
+
+# Integration tests
+[command]
+
+# E2E tests (if applicable)
+[command]
+```
+
+## CI/CD
+
+- PR checks: [which workflows run]
+- Release: [how releases are triggered]
+
+## Key Commands
+
+| Task | Command |
+|------|---------|
+| Install dependencies | `[command]` |
+| Run dev server | `[command]` |
+| Build for production | `[command]` |
+| Run tests | `[command]` |
+| Run linting | `[command]` |
+
+## Gotchas & Special Cases
+
+- [Any non-obvious behavior, edge cases, or project-specific quirks]
+
+## References
+
+- **README.md**: [Link to README]
+- **Documentation**: [Link to docs]
+- **Related Repos**: [Links to related repositories]
+
+---
+
+**Last Updated**: [YYYY-MM-DD]
+**Maintained By**: [Team/Owner]
