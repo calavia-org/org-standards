@@ -27,6 +27,7 @@
 | Path | Scope | Repository | Governs |
 |------|-------|------------|---------|
 | `~/Development/Github/AGENTS.md` | calavia-org | `calavia-org/org-standards` | All repositories under `~/Development/Github/` |
+| `org-standards/github-harness/AGENTS.md` | calavia-org | `calavia-org/org-standards` | Source of truth for organization-wide rules |
 
 ### Level 2: Team/Domain
 

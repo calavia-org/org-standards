@@ -28,8 +28,14 @@ else
     echo -e "${GREEN}✓${NC} Base AGENTS.md found"
 fi
 
-# Find all AGENTS.md files
-AGENTS_FILES=$(find "$BASE_DIR" -name "AGENTS.md" -type f | sort)
+# Find all AGENTS.md files (exclude temp/build directories)
+AGENTS_FILES=$(find "$BASE_DIR" -name "AGENTS.md" -type f \
+    ! -path "*/.tox/*" \
+    ! -path "*/.tmp/*" \
+    ! -path "*/tmp/*" \
+    ! -path "*/.venv/*" \
+    ! -path "*/node_modules/*" \
+    | sort)
 TOTAL=$(echo "$AGENTS_FILES" | wc -l | tr -d ' ')
 
 echo ""
@@ -41,7 +47,7 @@ while IFS= read -r file; do
     REL_PATH="${file#$BASE_DIR/}"
     IS_BASE=false
     
-    if [[ "$REL_PATH" == "AGENTS.md" ]]; then
+    if [[ "$REL_PATH" == "AGENTS.md" ]] || [[ "$REL_PATH" == "org-standards/github-harness/AGENTS.md" ]]; then
         IS_BASE=true
     fi
     
@@ -49,8 +55,11 @@ while IFS= read -r file; do
     
     # Check for mandatory read notice (skip base file)
     if [[ "$IS_BASE" == false ]]; then
+        # Check if it directly references parent AGENTS.md or is in a subdir that does
         if grep -q "MANDATORY READ" "$file" && grep -q "AGENTS.md" "$file"; then
             echo -e "  ${GREEN}✓${NC} References parent AGENTS.md"
+        elif grep -q "Applies on top of the parent" "$file" && grep -q "AGENTS.md" "$file"; then
+            echo -e "  ${GREEN}✓${NC} References parent AGENTS.md (alternate format)"
         else
             echo -e "  ${RED}✗ MISSING${NC}: Mandatory read notice not found"
             echo -e "  ${YELLOW}  Add:${NC} > **MANDATORY READ**: This repository is governed by [...]"
