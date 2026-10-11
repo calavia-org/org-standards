@@ -206,30 +206,73 @@ All CI/CD workflows MUST be sourced from `calavia-org/workflows-lib` when a reus
 
 ## 6. Pre-Commit Requirements
 
-All repositories MUST use pre-commit hooks with at minimum:
+All repositories MUST use pre-commit hooks. The canonical configuration lives in [`templates/.pre-commit-config.yaml.template`](templates/.pre-commit-config.yaml.template); copy it verbatim to `.pre-commit-config.yaml` in the repository root.
+
+### 6.1 Required hook set
 
 ```yaml
 repos:
+  # Universal — required in every repository
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-yaml
       - id: check-merge-conflict
       - id: trailing-whitespace
       - id: end-of-file-fixer
+      - id: check-added-large-files
       - id: no-commit-to-branch
-        args: [--branch, main, --branch, master, --pattern, release/*]
+        args: ['--branch', 'main', '--branch', 'master', '--branch', '/^release\/.+/']
 
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.2.0
+    rev: v4.0.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
+        args: [feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert]
+
+  # Documentation — when the repository contains Markdown
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: ['--disable', 'MD013', 'MD033', 'MD041']
+
+  # GitHub Actions — when .github/workflows exists
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
+  # Python — when the repository contains .py files
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
 ```
 
 **Critical hooks**:
 - `no-commit-to-branch`: Prevents direct commits to protected branches
 - `conventional-pre-commit`: Enforces conventional commit messages
+
+### 6.2 Coverage rule
+
+Pre-commit MUST actually lint every language present in the repository — it is **not** sufficient to only run the test suite. In particular:
+
+- Markdown (`markdownlint`) whenever the repository contains `.md` files
+- Python (`ruff` + `ruff-format`) whenever the repository contains `.py` files
+- GitHub Actions (`actionlint`) whenever `.github/workflows` exists
+
+Hooks whose file selectors match nothing are skipped automatically, so the canonical template can be copied verbatim without removing language-specific hooks.
+
+### 6.3 Language-specific extras
+
+Add and configure when applicable (examples in the template, commented out):
+
+- `yamllint` (`adrienverge/yamllint`) for Ansible / YAML-heavy repositories
+- `ansible-lint` (`ansible/ansible-lint`) for Ansible roles and collections
 
 ## 7. Release Workflow
 
@@ -343,6 +386,6 @@ If you encounter any of these situations, STOP and escalate:
 
 ---
 
-**Last Updated**: 2026-09-19
+**Last Updated**: 2026-10-11
 **Applies To**: All repositories under `~/Development/Github`
 **Enforced By**: Pre-commit hooks, branch protection, CI checks

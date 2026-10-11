@@ -12,7 +12,8 @@ Central repository for organization-wide development standards, harnesses, and g
 │   ├── verify-agents.sh       # Validate local AGENTS.md files are in sync
 │   └── sync-to-local.sh       # Sync standards to local development directories
 ├── templates/
-│   └── AGENTS.md.template     # Template for new per-repo AGENTS.md files
+│   ├── AGENTS.md.template                # Template for new per-repo AGENTS.md files
+│   └── .pre-commit-config.yaml.template  # Canonical pre-commit hook set
 ├── manifest.md                # Registry of all organizational AGENTS.md locations
 └── README.md                  # This file
 ```
@@ -46,8 +47,9 @@ jobs:
 ### For New Repositories
 
 1. Copy `templates/AGENTS.md.template` to your new repo
-2. Add project-specific details
-3. Ensure branch protection rules are configured (see `github-harness/AGENTS.md` Section 1.2)
+2. Copy `templates/.pre-commit-config.yaml.template` to `.pre-commit-config.yaml` in the new repo, then run `pre-commit install --install-hooks` and `pre-commit install --hook-type commit-msg`
+3. Add project-specific details
+4. Ensure branch protection rules are configured (see `github-harness/AGENTS.md` Section 1.2)
 
 ## Maintenance
 
@@ -68,6 +70,6 @@ When updating organization-wide rules:
 
 ---
 
-**Last Updated**: 2026-09-19
+**Last Updated**: 2026-10-11
 **Maintained By**: calavia-org
 **Enforced By**: Pre-commit hooks, branch protection, CI checks
