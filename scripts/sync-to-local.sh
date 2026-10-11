@@ -40,7 +40,7 @@ echo "🔍 Verifying per-repo AGENTS.md references..."
 
 find "$TARGET_DIR" -mindepth 2 -name "AGENTS.md" -type f | while read -r file; do
     REL_PATH="${file#$TARGET_DIR/}"
-    
+
     if grep -q "MANDATORY READ" "$file" && grep -q "AGENTS.md" "$file"; then
         echo -e "  ${GREEN}✓${NC} $REL_PATH"
     else
