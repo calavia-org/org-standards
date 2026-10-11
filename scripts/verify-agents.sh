@@ -46,13 +46,13 @@ echo ""
 while IFS= read -r file; do
     REL_PATH="${file#$BASE_DIR/}"
     IS_BASE=false
-    
+
     if [[ "$REL_PATH" == "AGENTS.md" ]] || [[ "$REL_PATH" == "org-standards/github-harness/AGENTS.md" ]]; then
         IS_BASE=true
     fi
-    
+
     echo "Checking: $REL_PATH"
-    
+
     # Check for mandatory read notice (skip base file)
     if [[ "$IS_BASE" == false ]]; then
         # Check if it directly references parent AGENTS.md or is in a subdir that does
@@ -66,7 +66,7 @@ while IFS= read -r file; do
             ERRORS=$((ERRORS + 1))
         fi
     fi
-    
+
     # Check for conventional commits reference
     if grep -q "conventional commit" "$file" || grep -q "Conventional Commits" "$file"; then
         echo -e "  ${GREEN}✓${NC} References conventional commits"
@@ -74,7 +74,7 @@ while IFS= read -r file; do
         echo -e "  ${YELLOW}⚠ WARNING${NC}: No conventional commits reference"
         WARNINGS=$((WARNINGS + 1))
     fi
-    
+
     # Check for branch naming reference
     if grep -q "feat/" "$file" || grep -q "fix/" "$file" || grep -q "branch naming" "$file"; then
         echo -e "  ${GREEN}✓${NC} References branch naming conventions"
@@ -82,13 +82,13 @@ while IFS= read -r file; do
         echo -e "  ${YELLOW}⚠ WARNING${NC}: No branch naming conventions reference"
         WARNINGS=$((WARNINGS + 1))
     fi
-    
+
     # Check file is not empty
     if [[ ! -s "$file" ]]; then
         echo -e "  ${RED}✗ EMPTY${NC}: File is empty"
         ERRORS=$((ERRORS + 1))
     fi
-    
+
 done <<< "$AGENTS_FILES"
 
 # Check manifest references
@@ -98,15 +98,15 @@ echo "📋 Checking manifest..."
 
 if [[ -f "$SCRIPT_DIR/../manifest.md" ]]; then
     MANIFEST="$SCRIPT_DIR/../manifest.md"
-    
+
     while IFS= read -r file; do
         REL_PATH="${file#$BASE_DIR/}"
-        
+
         # Skip base file in manifest check
         if [[ "$REL_PATH" == "AGENTS.md" ]]; then
             continue
         fi
-        
+
         # Check if repo is in manifest
         REPO_NAME=$(basename "$(dirname "$file")")
         if grep -q "$REPO_NAME" "$MANIFEST" || grep -q "$REL_PATH" "$MANIFEST"; then

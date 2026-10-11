@@ -1,7 +1,7 @@
 # Organizational AGENTS.md Manifest
 
 > **Purpose**: Registry of all organizational-level AGENTS.md files that govern multiple repositories or directories.
-> 
+>
 > **Rule**: Every organizational AGENTS.md MUST be listed here. Every per-repo AGENTS.md MUST reference its governing organizational file.
 
 ## Organizational Hierarchy
