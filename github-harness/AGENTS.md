@@ -184,14 +184,31 @@ All CI/CD workflows MUST be sourced from `calavia-org/workflows-lib` when a reus
 ### 5.2 Workflow Usage Rules
 
 1. **Always check `workflows-lib` first** before creating a new workflow
-2. **If a reusable workflow exists**, use it via `workflow_call`:
+2. **If a reusable workflow exists**, use it via `workflow_call`. Start from
+   [`templates/pr-check-and-test.yml.template`](templates/pr-check-and-test.yml.template)
+   for `pr-check-and-test.yml`:
    ```yaml
+   permissions:
+     # Required: the called workflow's pre-release job requests contents: write,
+     # and GitHub validates callee job permissions against the caller's grant at
+     # startup (before any `if:` is evaluated). `contents: read` => startup_failure.
+     contents: write
+     checks: write
+     pull-requests: write
    jobs:
      pr-check:
        uses: calavia-org/workflows-lib/.github/workflows/pr-check-and-test.yml@v0
+       with:
+         # `run-tox` defaults to true and fails when there is no tox.ini.
+         run-tox: false
        secrets:
          github-token: ${{ secrets.GITHUB_TOKEN }}
    ```
+   Two failure modes that do not announce themselves:
+   - Omit `contents: write` and every run dies with `startup_failure` (0 jobs,
+     instant) even though the workflow file is valid.
+   - Leave `run-tox` at its default in a repo without a `tox.ini` and the Tox
+     Matrix job fails; `fail-on-missing: false` does not disable it.
 3. **If no reusable workflow exists** for your use case:
    - Create it in `workflows-lib` FIRST
    - Use `workflow_call` trigger for reusability

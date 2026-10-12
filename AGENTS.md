@@ -17,7 +17,8 @@ Central repository for organization-wide development standards, harnesses, and g
 │   └── verify-agents.sh       # Validate AGENTS.md files + manifest coverage
 ├── templates/
 │   ├── AGENTS.md.template                # Skeleton for new per-repo AGENTS.md files
-│   └── .pre-commit-config.yaml.template  # Canonical pre-commit configuration
+│   ├── .pre-commit-config.yaml.template  # Canonical pre-commit configuration
+│   └── pr-check-and-test.yml.template    # Canonical reusable-CI caller for PR checks
 ├── manifest.md                # Registry of all organizational AGENTS.md files
 └── README.md                  # This file
 ```
@@ -54,7 +55,7 @@ pre-commit run --all-files
 
 ## CI/CD
 
-- **PR checks**: `.github/workflows/pr-check-and-test.yml` calls `calavia-org/workflows-lib/.github/workflows/pr-check-and-test.yml@v0`.
+- **PR checks**: `.github/workflows/pr-check-and-test.yml` calls `calavia-org/workflows-lib/.github/workflows/pr-check-and-test.yml@v0`. Start from `templates/pr-check-and-test.yml.template`: the caller MUST grant `contents: write` (the reusable workflow's pre-release job requests it, and GitHub validates callee permissions against the caller at startup, so `contents: read` causes `startup_failure`), and MUST set `run-tox: false` unless the repo has a `tox.ini`.
 - **Release**: none — this repo has no versioned artifact.
 
 ## Commits & Branches
