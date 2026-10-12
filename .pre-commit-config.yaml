@@ -45,7 +45,7 @@ repos:
       - id: markdownlint
         args: ['--disable', 'MD013', 'MD033', 'MD041']
 
-  # --- GitHub Actions (no workflows in this repo; hook self-skips) ------------
+  # --- GitHub Actions ---------------------------------------------------------
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.12
     hooks:
