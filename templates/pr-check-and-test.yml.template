@@ -1,0 +1,41 @@
+name: PR Check and Test
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+# contents: write is required by the reusable workflow's pre-release job, and
+# checks + pull-requests by its report job. GitHub validates the called
+# workflow's job permissions against this grant at startup (before any `if:` is
+# evaluated), so contents: write must be present even though ordinary PRs never
+# create a release. Granting only contents: read makes every run startup_fail.
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
+
+jobs:
+  pr-check-and-test:
+    uses: calavia-org/workflows-lib/.github/workflows/pr-check-and-test.yml@v0
+    with:
+      # Omit `technology` to auto-detect, or pin it to one of:
+      # java, nodejs, go, python, rust, ansible, generic.
+      # technology: generic
+
+      # Turn off the phases this repository does not have. `run-tox` defaults to
+      # true and fails the Tox Matrix job when there is no tox.ini, so set it
+      # explicitly instead of relying on `fail-on-missing`.
+      run-tox: false
+      run-build: false
+      run-unit-tests: false
+      run-integration-tests: false
+
+      # Enable the phases the repository actually has, for example:
+      # run-unit-tests: true
+      # run-integration-tests: true
+
+      fail-on-missing: false
+      report-enabled: true
+      comment-on-pr: true
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
